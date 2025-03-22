@@ -28,3 +28,5 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+
+echo "chatroom-1074d-firebase-adminsdk-fbsvc-5e2028ef58.json"
