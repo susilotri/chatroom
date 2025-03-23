@@ -6,16 +6,23 @@
 
 import './bootstrap';
 import { createApp } from 'vue';
-import Login from './components/Login.vue';
-
+import App from './App.vue';
+import router from './router';
+import axios from 'axios';
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
  * to use in your application's views. An example is included for you.
  */
 
-const app = createApp({});
-app.component('Login', Login)
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "http://127.0.0.1:8000";
+axios.get('/sanctum/csrf-cookie').then(() => {
+    console.log('CSRF cookie set');
+});
+
+const app = createApp(App);
+app.use(router);
 
 // import ExampleComponent from './components/ExampleComponent.vue';
 // app.component('example-component', ExampleComponent);

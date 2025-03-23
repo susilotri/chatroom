@@ -10,7 +10,7 @@ Route::get('/test', function () {
 });
 
 Route::get('/auth/google', [AuthController::class, 'redirectToGoogle']);
-Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+Route::post('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 Route::post('/auth/register', [AuthController::class, 'registerUser']);
 
 Route::middleware('auth:sanctum')->group(function () {
