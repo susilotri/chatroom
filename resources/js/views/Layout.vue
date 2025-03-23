@@ -5,7 +5,7 @@
 
         <!-- Main Content -->
         <div class="flex flex-col flex-grow">
-            <Navbar @logout="logout" />
+            <Navbar :user="user" @logout="logout" />
 
             <main class="p-6">
                 <router-view></router-view>
@@ -15,12 +15,14 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
-import Navbar from "../components/NavBar.vue"; // Pastikan path benar
-import SideBar from "../components/SideBar.vue"; // Pastikan path benar
+import Navbar from "../components/NavBar.vue"; 
+import SideBar from "../components/SideBar.vue";
 
 const router = useRouter();
+const user = ref(JSON.parse(localStorage.getItem("user")) || { name: "", google_id: "" });
 
 const logout = async () => {
     try {
@@ -28,6 +30,7 @@ const logout = async () => {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
         localStorage.removeItem("token");
+        localStorage.removeItem("user");
         router.push("/login");
     } catch (error) {
         console.error("Logout gagal:", error);

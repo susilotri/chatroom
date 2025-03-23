@@ -36,18 +36,16 @@ class AuthController extends Controller
 
             $googleUser = $googleResponse->json();
 
-            // Cek apakah user sudah ada di database
             $user = User::where('email', $googleUser['email'])->first();
 
             if (!$user) {
                 return response()->json([
-                    'google_id' => $googleUser['sub'],  // ID Google User
+                    'google_id' => $googleUser['sub'],
                     'email' => $googleUser['email'],
                     'name' => $googleUser['name'],
                 ], 200);
             }
 
-            // Generate token untuk user yang sudah ada
             $token = $user->createToken('authToken')->plainTextToken;
 
             return response()->json([
@@ -57,8 +55,6 @@ class AuthController extends Controller
         } catch (InvalidStateException $e) {
             return response()->json(['error' => 'Invalid state'], 401);
         } catch (\Exception $e) {
-            dd($e);
-            // Handle error lain-lain
             return response()->json(['error' => 'Error occurred'], 500);
         }
     }
@@ -87,5 +83,11 @@ class AuthController extends Controller
             'access_token' => $token,
             'user' => $user,
         ]);
+    }
+
+    public function logoutUser(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logout successful']);
     }
 }

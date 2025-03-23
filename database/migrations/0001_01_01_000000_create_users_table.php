@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('google_id')->unique();
             $table->string('role')->default('user'); // admin atau user
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 

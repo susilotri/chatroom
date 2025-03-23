@@ -38,9 +38,9 @@ export default {
                 nickname: nickname,
               })
               .then(registerRes => {
-                console.log("Response dari register:", registerRes.data);
                 if (registerRes.data.access_token) {
                     localStorage.setItem("token", registerRes.data.access_token);
+                    localStorage.setItem("user", JSON.stringify(registerRes.data.user));
                     alert("Login successful!");
                     window.location.href = "/";
                 } else {
@@ -50,11 +50,10 @@ export default {
               });
             } else {
               localStorage.setItem("token", res.data.access_token);
+              localStorage.setItem("user", JSON.stringify(res.data.user));
+              alert("Login successful!");
+              window.location.href = "/";
             }
-            alert("Login successful!");
-            setTimeout(() => {
-                window.location.href = "/";
-            }, 500);
           });
         });
     } catch (error) {
