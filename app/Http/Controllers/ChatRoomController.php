@@ -12,17 +12,37 @@ class ChatRoomController extends Controller
 {
     public function create(Request $request){
         $request->validate([
-            'name' => 'required|string'
+            'name' => 'required|string',
+            'invited_user_ids' => 'required|array|min:1',
+            'invited_user_ids.*' => 'exists:users,id'
         ]);
 
         $chatRoom = ChatRoom::create([
             'name' => $request->name,
             'created_by' => $request->user()->id
         ]);
-        ChatRoomUser::create([
+
+        $userId = $request->user()->id;
+
+        $invites = [];
+        $invites[] = [
             'chat_room_id' => $chatRoom->id,
-            'user_id' => Auth::id()
-        ]);
+            'user_id' => $userId,
+            'status' => 'joined', 
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        foreach ($request->invited_user_ids as $invitedUserId) {
+            $invites[] = [
+                'chat_room_id' => $chatRoom->id,
+                'user_id' => $invitedUserId,
+                'status' => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+        ChatRoomUser::insert($invites);
 
         return response()->json([
             'message' => 'Chat room berhasil dibuat.',

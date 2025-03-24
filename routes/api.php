@@ -22,7 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::post('/logout', [AuthController::class, 'logoutUser']);
 
+    Route::get('/users', [AuthController::class, 'getUsers']);
+
     Route::post('/chatroom/create', [ChatRoomController::class, 'create']);
+    
     Route::post('/chatroom/invite/{chatRoomId}', [ChatRoomController::class, 'inviteUser']);
     Route::post('/chatroom/respond/{chatRoomId}', [ChatRoomController::class, 'respondToInvite']);
     Route::get('/chatroom/active', [ChatRoomController::class, 'listActiveChatRooms']);
